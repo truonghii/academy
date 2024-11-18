@@ -1,9 +1,13 @@
 package com.sqc.academy.controller;
 
+import com.sqc.academy.Response.JsonResponse;
+import com.sqc.academy.exception.AppException;
+import com.sqc.academy.exception.ErrorCode;
 import com.sqc.academy.model.Employee;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,23 +39,23 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable UUID id) {
+    public ResponseEntity<?> getEmployeeById(@PathVariable UUID id) {
         return employees.stream()
                 .filter(e->e.getId().equals(id))
                 .findFirst()
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .map(JsonResponse::ok)
+                .orElseThrow(() -> new AppException(ErrorCode.EMPLOYEE_NOT_EXISTED));
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
+    public ResponseEntity<?> createEmployee(@RequestBody Employee employee) {
         employee.setId(UUID.randomUUID());
         employees.add(employee);
-        return ResponseEntity.status(HttpStatus.CREATED).body(employee);
+        return JsonResponse.created(employee);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable UUID id, @RequestBody Employee employee) {
+    public ResponseEntity<?> updateEmployee(@PathVariable UUID id, @RequestBody Employee employee) {
         return employees.stream()
                 .filter(e -> e.getId().equals(id))
                 .findFirst()
@@ -62,9 +66,9 @@ public class EmployeeController {
                     e.setDob(employee.getDob());
                     e.setPhone(employee.getPhone());
 
-                    return ResponseEntity.ok(e);
+                    return JsonResponse.ok(e);
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(()-> new AppException(ErrorCode.EMPLOYEE_NOT_EXISTED));
     }
 
     @DeleteMapping("/{id}")
@@ -74,8 +78,8 @@ public class EmployeeController {
                 .findFirst()
                 .map(s -> {
                     employees.remove(s);
-                    return ResponseEntity.ok().build();
+                    return JsonResponse.noContent();
                 })
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(()-> new AppException(ErrorCode.EMPLOYEE_NOT_EXISTED));
     }
 }
