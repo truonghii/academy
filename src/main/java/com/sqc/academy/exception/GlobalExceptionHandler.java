@@ -9,7 +9,6 @@ public class GlobalExceptionHandler {
     ResponseEntity<?> handleAppException(AppException e) {
         ErrorCode errorCode = e.getErrorCode();
 
-        return ResponseEntity.status(errorCode.getHttpStatus()).body(
                 ApiResponse.builder()
                     .code(errorCode.getCode())
                     .message(errorCode.getMessage())
