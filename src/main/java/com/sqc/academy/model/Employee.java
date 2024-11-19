@@ -19,6 +19,7 @@ public class Employee {
     private Gender gender;
     private Double salary;
     private String phone;
+    Integer departmentId;
 
 
     public enum Gender {
