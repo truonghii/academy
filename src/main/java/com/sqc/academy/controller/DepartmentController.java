@@ -1,6 +1,6 @@
 package com.sqc.academy.controller;
 
-import com.sqc.academy.Response.JsonResponse;
+import com.sqc.academy.response.JsonResponse;
 import com.sqc.academy.exception.AppException;
 import com.sqc.academy.exception.ErrorCode;
 import com.sqc.academy.model.Department;

@@ -1,4 +1,4 @@
-package com.sqc.academy.Response;
+package com.sqc.academy.response;
 
 import com.sqc.academy.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
